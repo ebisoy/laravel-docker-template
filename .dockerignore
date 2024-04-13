@@ -1,4 +1,6 @@
-vendor/
+vendor/**/*/
 composer.lock
 bootstrap/cache/**/*/
 framework/views/**/*/
+.gitignore
+.git

@@ -1,24 +1,24 @@
 services:
   app:
     build:
-      args:
-        user: myusername
-        uid: 1000
       context: .
       dockerfile: dev.Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: .
-          target: /var/www
     image: laravel-docker
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     container_name: app
     restart: unless-stopped
     volumes:
-      - '.:/var/www'
-    working_dir: /var/www
+      - ./app:/var/www/html/app
+      - ./bootstrap:/var/www/html/bootstrap
+      - ./config:/var/www/html/config
+      - ./database:/var/www/html/database
+      - ./public:/var/www/html/public
+      - ./resources:/var/www/html/resources
+      - ./routes:/var/www/html/routes
+      - ./tests:/var/www/html/tests
+      - ./composer.json:/var/www/html/composer.json
+      - ./package.json:/var/www/html/package.json
     networks:
       - laravel
     depends_on:
@@ -74,7 +74,16 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./:/var/www
+      - ./app:/var/www/html/app
+      - ./bootstrap:/var/www/html/bootstrap
+      - ./config:/var/www/html/config
+      - ./database:/var/www/html/database
+      - ./public:/var/www/html/public
+      - ./resources:/var/www/html/resources
+      - ./routes:/var/www/html/routes
+      - ./tests:/var/www/html/tests
+      - ./composer.json:/var/www/html/composer.json
+      - ./package.json:/var/www/html/package.json
       - './.docker/nginx:/etc/nginx/conf.d'
     networks:
       - laravel
@@ -83,6 +92,8 @@ networks:
   laravel:
     driver: bridge
 volumes:
+  laravel-app:
+    driver: local
   laravel-mysql:
     driver: local
   laravel-redis:
