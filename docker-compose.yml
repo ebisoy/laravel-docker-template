@@ -1,6 +1,9 @@
 services:
   app:
     build:
+      args:
+        user: myusername
+        uid: 1000
       context: .
       dockerfile: dev.Dockerfile
     image: laravel-docker
