@@ -1,0 +1,17 @@
+FROM php:8.3-fpm
+
+WORKDIR /var/www/html
+
+RUN docker-php-ext-install pdo pdo_mysql
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN apt-get update && apt-get install -y supervisor && mkdir -p /var/log/supervisor
+
+COPY . /var/www/html/
+
+RUN composer install 
+
+COPY ./worker.conf /etc/supervisor/conf.d
+
+CMD ["/usr/bin/supervisord", "-n"]
